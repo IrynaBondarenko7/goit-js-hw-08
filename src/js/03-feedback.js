@@ -7,7 +7,7 @@ const refs = {
 
 const STORAGE_KEY = 'feedback-form-state';
 //об'єкт в якому ми зберігаємо значення всіх полів
-const formData = {};
+const formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.form.addEventListener('input', throttle(onFormInput, 500));
@@ -42,12 +42,20 @@ function onFormInput(e) {
 
 function populateInputs() {
   const savedMessages = localStorage.getItem(STORAGE_KEY);
+
   //перевіряємо чи є дані в локал сторідж
   if (savedMessages) {
     const parsedData = JSON.parse(savedMessages);
 
-    // оновлюємо DOM
-    refs.textarea.value = parsedData.message;
-    refs.emailInput.value = parsedData.email;
+    // якщо є - оновлюємо DOM
+    // робимо додаткову перевірку, якщо заповнене тільки 1 поле
+    for (const key in parsedData) {
+      if (key === 'message') {
+        refs.textarea.value = parsedData.message;
+      } else if (key === 'email') {
+        refs.emailInput.value = parsedData.email;
+      }
+    }
   }
+  //якщо ні нічого не робимо
 }
