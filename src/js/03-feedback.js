@@ -7,7 +7,7 @@ const refs = {
 
 const STORAGE_KEY = 'feedback-form-state';
 //об'єкт в якому ми зберігаємо значення всіх полів
-const formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+let formData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
 
 refs.form.addEventListener('submit', onFormSubmit);
 refs.form.addEventListener('input', throttle(onFormInput, 500));
@@ -31,6 +31,9 @@ function onFormSubmit(evt) {
 
   //при сабміті виводимо у консоль об'єкт з полями email, message
   console.log(formData);
+
+  //очищаємо дані з об'єкта, щоб не підтягувались після сабміту в локал сторідж
+  formData = {};
 }
 
 function onFormInput(e) {
